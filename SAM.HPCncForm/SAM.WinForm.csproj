@@ -46,7 +46,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="ZedGraph">
-      <HintPath>..\..\zedgraph_dll_v509_459\zedgraph_dll_v5.0.9\ZedGraph.dll</HintPath>
+      <HintPath>..\Lib\ZedGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
