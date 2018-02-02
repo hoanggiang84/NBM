@@ -15,7 +15,7 @@ namespace SAM.HPCncForm
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new AScanForm());
+            //Application.Run(new AScanForm());
         }
     }
 }
