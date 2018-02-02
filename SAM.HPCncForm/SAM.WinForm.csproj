@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AE8E968D-36D4-4252-BAC5-A8771A8D0516}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SAM.HPCncForm</RootNamespace>
+    <AssemblyName>SAM.HPCncForm</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Microsoft.VisualBasic.PowerPacks.Vs, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="ZedGraph">
+      <HintPath>..\..\zedgraph_dll_v509_459\zedgraph_dll_v5.0.9\ZedGraph.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Classes\WaitTimer.cs" />
+    <Compile Include="DataProcessing\AScanForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataProcessing\AScanForm.Designer.cs">
+      <DependentUpon>AScanForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataProcessing\AScanTrack.cs" />
+    <Compile Include="DataProcessing\DataProcessForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataProcessing\DataProcessForm.Designer.cs">
+      <DependentUpon>DataProcessForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CncControl\MemberFunctions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataProcessing\DataProcessingRefactoring.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SAMControl\CScanForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SAMControl\CScanForm.Designer.cs">
+      <DependentUpon>CScanForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SAMControl\SAMControlForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SAMControl\SAMControlForm.Designer.cs">
+      <DependentUpon>SAMControlForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SAMControl\SAMPartial.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CncControl\StandardControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CncControl\StandardControl.Designer.cs">
+      <DependentUpon>StandardControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TestForms\CncTestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TestForms\CncTestForm.Designer.cs">
+      <DependentUpon>CncTestForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestForms\NiscopeAcqTestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TestForms\NiscopeAcqTestForm.Designer.cs">
+      <DependentUpon>NiscopeAcqTestForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="DataProcessing\AScanForm.resx">
+      <DependentUpon>AScanForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataProcessing\DataProcessForm.resx">
+      <DependentUpon>DataProcessForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SAMControl\CScanForm.resx">
+      <DependentUpon>CScanForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SAMControl\SAMControlForm.resx">
+      <DependentUpon>SAMControlForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CncControl\StandardControl.resx">
+      <DependentUpon>StandardControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TestForms\CncTestForm.resx">
+      <DependentUpon>CncTestForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="TestForms\NiscopeAcqTestForm.resx">
+      <DependentUpon>NiscopeAcqTestForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SAM.Core\SAM.Core.csproj">
+      <Project>{1c025b8b-8845-44da-9358-da39af83adf9}</Project>
+      <Name>SAM.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
