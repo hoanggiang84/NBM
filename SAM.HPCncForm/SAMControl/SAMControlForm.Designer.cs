@@ -590,7 +590,7 @@
             this.labelMax.Name = "labelMax";
             this.labelMax.Size = new System.Drawing.Size(40, 39);
             this.labelMax.TabIndex = 1;
-            this.labelMax.Text = "Max:";
+            this.labelMax.Text = "MaxAmp:";
             this.labelMax.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelGrayLevel
@@ -1453,7 +1453,7 @@
             this.labelPlotAMax.Name = "labelPlotAMax";
             this.labelPlotAMax.Size = new System.Drawing.Size(40, 47);
             this.labelPlotAMax.TabIndex = 1;
-            this.labelPlotAMax.Text = "Max:";
+            this.labelPlotAMax.Text = "MaxAmp:";
             this.labelPlotAMax.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tabPageRecord

@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Numerics;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SAM.Core.DataProcessing;
+using SAM.HPCncForm.Classes;
 using ZedGraph;
 
 namespace SAM.HPCncForm.DataProcessing
@@ -23,19 +20,6 @@ namespace SAM.HPCncForm.DataProcessing
         }
 
         private Thread loadDataThread;
-        private void checkBoxGate1_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBoxGate1.Checked)
-                showGate1SettingForm();
-            else
-                hideGate1SettingForm();
-        }
-
-        private void hideGate1SettingForm()
-        {
-
-        }
-
 
 
         private const int shrinkFactor = 2;
@@ -50,7 +34,6 @@ namespace SAM.HPCncForm.DataProcessing
             configurePictureBox(pictureBoxGate3);
 
             var myPane = graphAScan.GraphPane;
-
             myPane.Title.Text = "A SCAN";
             myPane.YAxis.Title.Text = "Amplitude(V)";
             myPane.XAxis.Title.Text = "Sample";
@@ -65,9 +48,9 @@ namespace SAM.HPCncForm.DataProcessing
 
         private void configurePictureBox(PictureBox pictureBox)
         {
-            pictureBox.Width = numberOfRecords / shrinkFactor;
-            pictureBox.Height = numberOfBscan / shrinkFactor;
-            pictureBox.Image = new Bitmap(numberOfRecords / shrinkFactor, numberOfBscan / shrinkFactor);
+            pictureBox.Width = NUMBER_OF_RECORDS / shrinkFactor;
+            pictureBox.Height = NUMBER_OF_BSCAN / shrinkFactor;
+            pictureBox.Image = new Bitmap(NUMBER_OF_RECORDS / shrinkFactor, NUMBER_OF_BSCAN / shrinkFactor);
         }
 
         private void loadNewBscan()
@@ -87,7 +70,7 @@ namespace SAM.HPCncForm.DataProcessing
         {
             count += shrinkFactor;
             var path = string.Format(@"D:\CurrentWork\Data\29e79\e79\29e79_{0}.dat", count);
-            currentBScan = SamBScanLoader.LoadFloat(path, numberOfRecords, recordLength);
+            currentBScan = SamBScanLoader.LoadFloat(path, NUMBER_OF_RECORDS, RECORD_LENGTH);
         }
 
         private static double[] createSamplesArray(int dataLength)
@@ -101,18 +84,15 @@ namespace SAM.HPCncForm.DataProcessing
         }
 
         private int count;
-        private int offset2;
-        private int recordLength2;
-        private double gateMax2;
-        private const int recordLength = 150;
-        private const int numberOfRecords = 1400;
-        private const int numberOfBscan = 550;
+        private const int RECORD_LENGTH = 150;
+        private const int NUMBER_OF_RECORDS = 1400;
+        private const int NUMBER_OF_BSCAN = 550;
         private PointPairList gate1;
         private PointPairList gate2;
 
         private void timerMainLoop_Tick(object sender, EventArgs e)
         {
-            if (count >= numberOfBscan) 
+            if (count >= NUMBER_OF_BSCAN) 
             {
                 mainsw.Stop();
                 new Thread(()=>MessageBox.Show("Total time: " + mainsw.Elapsed.TotalSeconds)).Start();
@@ -121,10 +101,10 @@ namespace SAM.HPCncForm.DataProcessing
             }
 
             waitLoadingData();
-            var floatBscan = new float[numberOfRecords,recordLength];
-            for (int i = 0; i < numberOfRecords; i++)
+            var floatBscan = new float[NUMBER_OF_RECORDS,RECORD_LENGTH];
+            for (int i = 0; i < NUMBER_OF_RECORDS; i++)
             {
-                for (int j = 0; j < recordLength; j++)
+                for (int j = 0; j < RECORD_LENGTH; j++)
                 {
                     floatBscan[i, j] = currentBScan[i, j];
                 }
@@ -132,61 +112,69 @@ namespace SAM.HPCncForm.DataProcessing
 
             loadNewBscan();
 
-            var samples = createSamplesArray(150);
-            var myPane = graphAScan.GraphPane;
-            myPane.CurveList.Clear();
-            var ascanForDisplay = new double[150];
-            for (int i = 0; i < 150; i++)
-                ascanForDisplay[i] = floatBscan[10, i];
-
-            var aScanSignal = new PointPairList(samples, ascanForDisplay);
-            myPane.AddCurve("A Scan", aScanSignal, Color.Blue,SymbolType.None);
-            myPane.AddCurve("Gate 1", gate1, Color.Green, SymbolType.None);
-            myPane.AddCurve("Gate 2", gate2, Color.Maroon, SymbolType.None);
-            graphAScan.AxisChange();
-
-            var pixels = new byte[numberOfRecords/shrinkFactor];
-            var pixels1 = new byte[numberOfRecords/shrinkFactor];
-            var pixels2 = new byte[numberOfRecords/shrinkFactor];
-            Parallel.For(0, numberOfRecords / shrinkFactor, col =>
+            var pixels = new byte[NUMBER_OF_RECORDS/shrinkFactor];
+            var pixels1 = new byte[NUMBER_OF_RECORDS/shrinkFactor];
+            var pixels2 = new byte[NUMBER_OF_RECORDS/shrinkFactor];
+            Parallel.For(0, NUMBER_OF_RECORDS / shrinkFactor, col =>
             {
                 {
-                    var ascan = new double[150];
-                    for (int i = 0; i < 150; i++)
+                    var ascan = new double[RECORD_LENGTH];
+                    for (int i = 0; i < RECORD_LENGTH; i++)
                         ascan[i] = floatBscan[col * shrinkFactor, i];
 
-                    var ascan1 = new double[recordLength1];
-                    for (int i = 0; i < recordLength1; i++)
+                    double peak;
+                    var peakIndex = 0;
+                    calculateHilbert(RECORD_LENGTH, ascan, out peak, out peakIndex);
+
+                    var ascan1 = new double[scanGate1.RecordLength];
+                    for (int i = 0; i < scanGate1.RecordLength; i++)
                     {
-                        var idx = i + offset1;
+                        var idx = i + scanGate1.Offset + peakIndex;
+                        idx = Math.Min(RECORD_LENGTH - 1, idx);
                         ascan1[i] = floatBscan[col*shrinkFactor, idx];
                     }
 
-                    var ascan2 = new double[recordLength2];
-                    for (int i = 0; i < recordLength2; i++)
+                    var ascan2 = new double[scanGate2.RecordLength];
+                    for (int i = 0; i < scanGate2.RecordLength; i++)
                     {
-                        var idx = i + offset2;
+                        var idx = i + scanGate2.Offset + peakIndex;
+                        idx = Math.Min(RECORD_LENGTH - 1, idx);
                         ascan2[i] = floatBscan[col * shrinkFactor, idx];
                     }
-
-                    double peak;
-                    int peakIndex;
-                    calculateHilbert(recordLength, ascan, out peak, out peakIndex);
 
                     var pixelVal = convertToByteWithRange(peak, 0, 0.8);
                     pixels[col] = pixelVal;
 
-                    calculateHilbert(recordLength1, ascan1, out peak, out peakIndex);
-                    pixelVal = convertToByteWithRange(peak, 0, gateMax1);
+                    calculateHilbert(scanGate1.RecordLength, ascan1, out peak, out peakIndex);
+                    pixelVal = convertToByteWithRange(peak, 0, scanGate1.MaxAmp);
                     pixels1[col] = pixelVal;
 
-                    calculateHilbert(recordLength2, ascan2, out peak, out peakIndex);
-                    pixelVal = convertToByteWithRange(peak, 0, gateMax2);
+                    calculateHilbert(scanGate2.RecordLength, ascan2, out peak, out peakIndex);
+                    pixelVal = convertToByteWithRange(peak, 0, scanGate2.MaxAmp);
                     pixels2[col] = pixelVal;
                 }
             });
 
-            for (int i = 0; i < numberOfRecords / shrinkFactor; i++)
+ 
+            var samples = createSamplesArray(RECORD_LENGTH);
+            var myPane = graphAScan.GraphPane;
+            myPane.CurveList.Clear();
+            var ascanForDisplay = new double[RECORD_LENGTH];
+            for (int i = 0; i < RECORD_LENGTH; i++)
+                ascanForDisplay[i] = floatBscan[NUMBER_OF_RECORDS - 2, i];
+
+            double presentPeak;
+            int presentPeakIndex;
+            calculateHilbert(RECORD_LENGTH, ascanForDisplay, out presentPeak, out presentPeakIndex);
+            updateGate1(scanGate1, presentPeakIndex);
+            updateGate2(scanGate2, presentPeakIndex);
+            var aScanSignal = new PointPairList(samples, ascanForDisplay);
+            myPane.AddCurve("A Scan", aScanSignal, Color.Blue, SymbolType.None);
+            myPane.AddCurve("Gate 1", gate1, Color.Green, SymbolType.None);
+            myPane.AddCurve("Gate 2", gate2, Color.Maroon, SymbolType.None);
+            graphAScan.AxisChange();
+
+            for (int i = 0; i < NUMBER_OF_RECORDS / shrinkFactor; i++)
             {
                 var x = Math.Min(i, pictureBoxGate1.Width - 1);
                 var y = Math.Min((count - 1)/shrinkFactor, pictureBoxGate1.Height - 1);
@@ -224,38 +212,52 @@ namespace SAM.HPCncForm.DataProcessing
             return complexArray;
         }
 
-        private const string DOUBLE_FORMAT = "0.###";
-        private static string formatDouble(double num)
-        {
-            return num.ToString(DOUBLE_FORMAT);
-        }
-
-
+        private ScanGate scanGate1 = new ScanGate();
+        private ScanGate scanGate2 = new ScanGate();
         private void checkBoxGate2_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBoxGate2.Checked)
             {
-                offset2 = 85;
-                recordLength2 = 20;
-                gateMax2 = 0.25;
-                var gateListX = new List<double>() { offset2, offset2 + recordLength2, offset2 + recordLength2, offset2, offset2 };
-                var gateListY = new List<double>() { gateMax2, gateMax2, -gateMax2, -gateMax2, gateMax2 };
-
-                gate2 = new PointPairList(gateListX.ToArray(), gateListY.ToArray());
+                scanGate2 = new ScanGate(70, 20, 0.2);
+                updateGate2(scanGate2);
             }
         }
 
-        private int offset1;
-        private int recordLength1;
-        private double gateMax1;
-        private void showGate1SettingForm()
+        private void updateGate2(ScanGate sg, int peakIndex = 0)
         {
-            offset1 = 60;
-            recordLength1 = 20;
-            gateMax1 = 0.7;
-            var gateListX = new List<double>()
-                               {offset1, offset1 + recordLength1, offset1 + recordLength1, offset1, offset1};
-            var gateListY = new List<double>() {gateMax1, gateMax1, -gateMax1, -gateMax1, gateMax1};
+            var gateListX = new List<double>
+                                {
+                                    sg.Offset + peakIndex,
+                                    sg.Offset + peakIndex + sg.RecordLength,
+                                    sg.Offset + peakIndex + sg.RecordLength,
+                                    sg.Offset + peakIndex,
+                                    sg.Offset + peakIndex
+                                };
+            var gateListY = new List<double> {sg.MaxAmp, sg.MaxAmp, -sg.MaxAmp, -sg.MaxAmp, sg.MaxAmp};
+
+            gate2 = new PointPairList(gateListX.ToArray(), gateListY.ToArray());
+        }
+
+        private void checkBoxGate1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxGate1.Checked)
+            {
+                scanGate1 = new ScanGate(20, 20, 0.3);
+                updateGate1(scanGate1);
+            }
+        }
+
+        private void updateGate1(ScanGate sg, int peakIndex = 0)
+        {
+            var gateListX = new List<double>
+                                {
+                                    sg.Offset + peakIndex,
+                                    sg.Offset + peakIndex + sg.RecordLength,
+                                    sg.Offset + peakIndex + sg.RecordLength,
+                                    sg.Offset + peakIndex,
+                                    sg.Offset + peakIndex
+                                };
+            var gateListY = new List<double> {sg.MaxAmp, sg.MaxAmp, -sg.MaxAmp, -sg.MaxAmp, sg.MaxAmp};
 
             gate1 = new PointPairList(gateListX.ToArray(), gateListY.ToArray());
         }

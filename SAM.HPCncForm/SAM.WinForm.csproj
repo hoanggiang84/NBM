@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ScanGate.cs" />
     <Compile Include="Classes\WaitTimer.cs" />
     <Compile Include="DataProcessing\AScanForm.cs">
       <SubType>Form</SubType>
