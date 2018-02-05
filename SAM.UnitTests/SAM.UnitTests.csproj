@@ -56,6 +56,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\SamBScanLoaderTest.cs" />
     <Compile Include="Specification.cs" />
+    <Compile Include="Tests\ScanTrajactoryPlannerTest.cs" />
+    <Compile Include="Tests\TrajactoryPlanner.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SAM.Core\SAM.Core.csproj">
