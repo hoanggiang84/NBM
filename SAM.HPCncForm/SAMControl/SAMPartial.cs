@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading;
 using SAM.Core.DataProcessing;
 using SAM.Core.HPCNC;
-using SAM.Core.Nscope;
+using SAM.Core.NIScope;
 using SAM.Core;
 using ZedGraph;
 

@@ -39,6 +39,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\NUnit 2.6.4\bin\framework\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="SAM.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\SAM.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -58,12 +62,6 @@
     <Compile Include="Specification.cs" />
     <Compile Include="Tests\ScanTrajactoryPlannerTest.cs" />
     <Compile Include="Tests\TrajactoryPlanner.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SAM.Core\SAM.Core.csproj">
-      <Project>{1c025b8b-8845-44da-9358-da39af83adf9}</Project>
-      <Name>SAM.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

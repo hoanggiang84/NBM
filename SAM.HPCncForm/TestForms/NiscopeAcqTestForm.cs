@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using SAM.Core.Nscope;
+using SAM.Core.NIScope;
 
 namespace SAM.HPCncForm.TestForms
 {

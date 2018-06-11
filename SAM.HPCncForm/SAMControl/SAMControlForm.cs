@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using SAM.Core;
 using SAM.Core.DataProcessing;
 using SAM.Core.HPCNC;
+using SAM.Core.NIScope;
 using ZedGraph;
 
 namespace SAM.HPCncForm.SAMControl

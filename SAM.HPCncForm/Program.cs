@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using SAM.HPCncForm.DataProcessing;
-using SAM.HPCncForm.SAMControl;
 
 namespace SAM.HPCncForm
 {
@@ -15,7 +13,7 @@ namespace SAM.HPCncForm
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new AScanForm());
+            Application.Run(new FormStandardControl());
         }
     }
 }
